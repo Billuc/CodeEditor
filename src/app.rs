@@ -42,6 +42,11 @@ impl eframe::App for App {
                             files.push(new_file);
                             *selected_index = files.len() - 1;
                         }
+                        ui.close_menu()
+                    }
+
+                    if ui.button("Open folder").clicked() {
+                        ui.close_menu()
                     }
                 });
             })

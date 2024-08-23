@@ -1,5 +1,4 @@
 use core::f32;
-
 use egui::Ui;
 
 use crate::FileData;
