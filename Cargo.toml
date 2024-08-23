@@ -10,6 +10,10 @@ rust-version = "1.76"
 all-features = true
 targets = ["x86_64-unknown-linux-gnu", "wasm32-unknown-unknown"]
 
+[features]
+## Enable better syntax highlighting using [`syntect`](https://docs.rs/syntect).
+syntect = ["egui_extras/syntect"]
+
 [dependencies]
 egui = "0.28"
 eframe = { version = "0.28", default-features = false, features = [
@@ -18,10 +22,13 @@ eframe = { version = "0.28", default-features = false, features = [
     "glow",          # Use the glow rendering backend. Alternative: "wgpu".
     "persistence",   # Enable restoring app state when restarting the app.
 ] }
+
 log = "0.4"
 
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
+egui_extras = "0.28.1"
+rfd = "0.14.1"
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

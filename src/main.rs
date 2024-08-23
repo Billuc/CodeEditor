@@ -20,7 +20,7 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "CodeEditor",
         native_options,
-        Box::new(|cc| Ok(Box::new(code_editor::TemplateApp::new(cc)))),
+        Box::new(|cc| Ok(Box::new(code_editor::App::new(cc)))),
     )
 }
 
@@ -37,7 +37,7 @@ fn main() {
             .start(
                 "the_canvas_id",
                 web_options,
-                Box::new(|cc| Ok(Box::new(code_editor::TemplateApp::new(cc)))),
+                Box::new(|cc| Ok(Box::new(code_editor::App::new(cc)))),
             )
             .await;
 
