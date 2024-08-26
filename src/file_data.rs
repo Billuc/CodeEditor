@@ -33,6 +33,10 @@ impl FileData {
         }
     }
 
+    pub fn from_path(path: PathBuf) -> Self {
+        FileData::new(path.to_string_lossy().to_string())
+    }
+
     pub fn get_path(self: &Self) -> &str {
         &self.path
     }

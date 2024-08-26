@@ -4,11 +4,13 @@ use egui::style;
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct Settings {
-    small_size: f32,
-    body_size: f32,
-    monospace_size: f32,
-    button_size: f32,
-    heading_size: f32,
+    pub small_size: f32,
+    pub body_size: f32,
+    pub monospace_size: f32,
+    pub button_size: f32,
+    pub heading_size: f32,
+
+    pub show_explorer: bool,
 }
 
 impl Default for Settings {
@@ -21,6 +23,8 @@ impl Default for Settings {
             monospace_size: defaults.get(&style::TextStyle::Monospace).unwrap().size,
             button_size: defaults.get(&style::TextStyle::Button).unwrap().size,
             heading_size: defaults.get(&style::TextStyle::Heading).unwrap().size,
+
+            show_explorer: true,
         }
     }
 }
@@ -32,7 +36,9 @@ impl Clone for Settings {
             body_size: self.body_size,
             monospace_size: self.monospace_size,
             button_size: self.button_size,
-            heading_size: self.heading_size
+            heading_size: self.heading_size,
+
+            show_explorer: self.show_explorer,
         }
     }
 }

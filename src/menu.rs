@@ -1,47 +1,53 @@
 use std::path::PathBuf;
 
-use egui::{Ui, Widget};
+use egui::Ui;
 
 pub struct Menu {
-    file_picked_callback: Box<dyn FnOnce(&mut PathBuf) -> ()>,    
+    file_picked: Option<PathBuf>,
 }
 
-impl Widget for Menu {
-    fn ui(self: Self, ui: &mut Ui) -> egui::Response {
+impl Menu {
+    pub fn new() -> Self {
+        Menu { file_picked: None }
+    }
+
+    pub fn show(self: &mut Self, ui: &mut Ui) -> egui::InnerResponse<Option<MenuEvent>> {
         egui::menu::bar(ui, |ui| {
+            let mut return_value: Option<MenuEvent> = None;
+
             ui.menu_button("File", |ui| {
                 if ui.button("Open file").clicked() {
                     if let Some(path) = rfd::FileDialog::new().pick_file() {
-                        self.file_picked_callback.into()(path);
-                        let new_file = FileData::new(path.to_string_lossy().to_string());
-                        files.push(new_file);
-                        *selected_index = files.len() - 1;
+                        return_value = Some(MenuEvent::FilePicked(path));
                     }
                     ui.close_menu();
                 }
 
                 if ui.button("Open folder").clicked() {
+                    if let Some(path) = rfd::FileDialog::new().pick_folder() {
+                        return_value = Some(MenuEvent::FolderPicked(path));
+                    }
                     ui.close_menu();
                 }
 
                 if ui.button("Settings").clicked() {
+                    return_value = Some(MenuEvent::Click(String::from("settings")));
                     ui.close_menu();
                 }
             });
-        }).response
+
+            return_value
+        })
+    }
+
+    pub fn file_picked(self: &Self) -> &Option<PathBuf> {
+        let Self { file_picked } = self;
+        file_picked
     }
 }
 
-impl Menu {
-    pub fn new() -> Self {
-        let noop = |p| {};
-
-        Menu {
-            file_picked_callback: Box::new(noop),
-        }
-    }
-
-    pub fn on_file_picked(self: &mut Self, callback: impl FnOnce(&mut PathBuf) -> ()) {
-        self.file_picked_callback = Box::new(callback);
-    }
+pub enum MenuEvent {
+    Click(String),
+    FilePicked(PathBuf),
+    FolderPicked(PathBuf),
 }
